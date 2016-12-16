@@ -1,0 +1,26 @@
+<a href="/events">Events Dashboard</a> | <a href="/sessions" data-method="delete">Logout</a>
+<% if flash[:errors] %>
+	<% flash[:errors].each do |e| %>
+		<p><%= e %></p>
+	<% end %>		
+<% end %>
+
+<h1>Edit Your Profile</h1> 
+<form action="/users/<%= @user.id %>" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <input type="hidden" name="_method" value="patch">
+  <p><label>First Name</label></p>
+  <input type="text" name="user[first_name]" value="<%= @user.first_name %>"><br>
+  <p><label>Last Name</label></p>
+  <input type="text" name="user[last_name]" value="<%= @user.last_name %>"><br>
+  <p><label>Email</label></p>
+  <input type="text" name="user[email]" value="<%= @user.email %>"><br>
+  <p><label>Location</label></p>
+  <input type="text" name="user[location]" value="<%= @user.location %>"><br>
+  <select name="user[state]">
+    <% @state.each do |s|%>
+	  <option value="<%= s.id %>" <%= "selected" if s.id == @user.state.to_i %>><%= s.name %></option>
+	<% end %>
+  </select>
+  <p><input type="submit" value="Update Records"></p>
+</form>

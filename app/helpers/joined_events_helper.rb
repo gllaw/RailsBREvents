@@ -1,0 +1,2 @@
+module JoinedEventsHelper
+end

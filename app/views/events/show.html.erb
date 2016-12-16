@@ -1,0 +1,30 @@
+<h1><%= event.name %></h1>
+<p>Host: <%= @event.hostf %> <%= @event.hostl %></p>
+<p>Date: <%= @event.date %></p>
+<p>Location: <%= @event.location %>, <%= @event.state %></p>
+<p>People who are joining the event: <!--WHAT GOES HERE AHHHH--></p>
+
+<table>
+	<tr>
+		<td>Name</td>
+		<td>Location</td>
+		<td>State</td>
+	</tr>
+	<tr>
+		<% @attendee.each do |a|%>
+		<td><%= a.first_name %> <%= a.last_name %></td>
+		<td><%= a.location %></td>
+		<td><%= a.state %></td>
+		<% end %>
+	</tr>
+</table>
+
+<h2>Discussion about this event:</h2>
+<textarea></textarea>
+
+<h2>Add Comment:</h2>
+<form action="" method="post">
+	<textarea></textarea>
+	<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+	<input type="submit" value="Submit Comments">
+</form>

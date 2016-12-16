@@ -1,0 +1,88 @@
+<a href="/user/<%= session[:user_id] %>">Edit My Profile</a> | <a href="/sessions" data-method="delete">Logout</a>
+
+<h1>Welcome, <%= @user.first_name %>! </h1>
+
+<h2>Here are some of the events in your state:</h2>
+<table>
+	<tr>
+		<td>Name</td>
+		<td>Date</td>
+		<td>Location</td>
+		<td>Host</td>
+		<td>Action/Status</td>
+	</tr>
+	<% @instate.each do |e| %>
+	<tr>
+		<td><a href="/events/<%= e.id %>"><%= e.name %></a></td>
+		<td><%= e.date%></td>		<!--, min: Date.today -->
+		<td><%= e.location %></td>
+		<td><%= e.host %></td>
+		<td>
+			<% if e.user_id == session[:user_id] %>
+		  		<a href="/events/<%= e.id %>" data-method="patch">Edit</a> | <a data-method="delete" href="/events/<%= e.id %>">Delete</a>
+			<% else %>
+		  		<% if JoinedEvent.find_attendees(e.id).exists?(session[:user_id]) %>
+		  			Joining 
+		    		<a href="/joined_events/<%= e.id %>" data-method="delete">Cancel</a>
+		  		<% else %>
+		    		<a href="/joined_events/<%= e.id %>" data-method="post">Join</a>
+		  		<% end %>
+			<% end %>
+		</td>
+	</tr>
+	<% end %>
+</table>
+
+
+<h2>Here are some of the events in other states:</h2>
+<table>
+	<tr>
+		<td>Name</td>
+		<td>Date</td>
+		<td>Location</td>
+		<td>State</td>
+		<td>Host</td>
+		<td>Action</td>
+	</tr>
+	<% @outofstate.each do |e| %>
+	<tr>	
+		<td><a href="/events/<%= e.id %>"><%= e.name %></a></td>
+		<td><%= e.date %></td>
+		<td><%= e.location %></td>
+		<td><%= e.state_name %></td>
+		<td><%= e.host %></td>
+		<td>
+			<% if JoinedEvent.find_attendees(e.id).exists?(session[:user_id]) %>
+		    	<a href="/joined_events/<%= e.id %>" data-method="delete">Cancel</a>
+		  	<% else %>
+		    	<a href="/joined_events/<%= e.id %>" data-method="post">Join</a>
+		  	<% end %>
+		</td>
+	</tr>
+	<% end %>
+</table>
+
+
+<h2>Add Event</h2>
+<% if flash[:errors] %>
+	<% flash[:errors].each do |e| %>
+		<p><%= e %></p>
+	<% end %>		
+<% end %>
+
+<form action="/events" method="post">
+	<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+	<input type="hidden" name="event[user_id]" value="<%= session[:user_id] %>">
+	<p><label>Name:</label>
+	<input type="text" name="event[name]"></p>
+	<p><label>Date:</label>
+	<input type="date" name="event[date]"></p>
+	<p><label>Location:</label>
+	<input type="text" name="event[location]">
+	<select name="event[state_id]">
+		<% @state.each do |s|%>
+			<option value="<%= s.id %>"><%= s.name %></option>
+		<% end %>
+	</select></p>
+	<p><input type="submit" value="Add Event"></p>
+</form>

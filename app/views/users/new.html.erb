@@ -1,0 +1,82 @@
+<style>
+	body{
+        padding: 2em;
+    }
+    .box{
+    	width: 30%;
+        display: inline-block; 
+        vertical-align: top;
+        border: 2px solid black;
+        padding: 3em;
+        margin-right: 1em;
+        text-align: center;
+    }
+    .box h2{
+    	text-align: left;
+    }
+    input{
+        display: inline-block;
+        vertical-align: top;
+    }
+    .button {
+        margin-top: 20px;
+    }
+    p{
+        /*display: inline-block;*/
+        vertical-align: top;
+        position: relative;
+        top: -15px;
+        margin-right: 10px;
+    }
+</style>
+
+
+<% if flash[:errors] %>
+	<% flash[:errors].each do |e| %>
+		<p><%= e %></p>
+	<% end %>		
+<% end %>
+<% if flash[:error] %>
+	<%= flash[:error] %>
+<% end %>
+
+
+<div id="body">
+	<h1>Welcome!</h1>
+	<div class="box">
+		<h2>Register</h2>
+		<form action="/users" method="post">
+		<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+		<p><label>First Name:</label>
+		<input type="text" name="user[first_name]"></p>
+		<p><label>Last Name:</label>
+		<input type="text" name="user[last_name]"></p>
+		<p><label>Email:</label>
+		<input type="text" name="user[email]"></p>
+		<p><label>Location:</label>
+		<input type="text" name="user[location]">
+		<select name="user[state]">
+		  <% @state.each do |s|%>
+		    <option value="<%= s.id %>"><%= s.name %></option>
+		  <% end %>
+		</select>
+		<p><label>Password:</label>
+		<input type="password" id="Password" name="user[password]"></p>
+		<p>*Password should be at least 8 characters</p>
+		<p><label>Confirm PW:</label>
+		<input type="password" name="user[password_confirmation]"></p>
+		<p><input class="button" type="submit" value="Register"></p>
+		</form>
+	</div>
+	<div class="box">
+		<h2>Login</h2>
+		<form action="/sessions" method="post">
+		<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+		<p><label>Email</label>
+		<input id="Email" type="text" name="user[email]"></p>
+		<p><label>Password</label>
+		<input id="Password" type="password" name="user[password]"></p>
+		<p><input class="button" type="submit" value="Login"></p>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,24 @@
+<% if flash[:errors] %>
+	<% flash[:errors].each do |e| %>
+		<p><%= e %></p>
+	<% end %>		
+<% end %>
+
+<h1>Edit Event</h1>
+<form action="events/<%= @event.id %>" method="post">
+	<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+	<input type="hidden" name="_method" value="patch">
+	<input type="hidden" name="event[user_id]" value="<%= session[:user_id %>">
+	<p><label>Name:</label>
+	<input type="text" name="event[name]" value="<%= @event.name %>"></p>
+	<p><label>Date:</label>
+	<input type="date" name="event[date]" value="<%= @event.date %>"></p>
+	<p><label>Location:</label>
+	<input type="text" name="event[location]" value="<%= @event.location %>">
+	<select name="event[state_id]">
+      <% @state.each do |s|%>
+	    <option value="<%= s.id %>" <%= "selected" if s.id == @event.state.to_i %>><%= s.name %></option>
+	  <% end %>
+    </select>
+	<p><input type="submit" value="Update"></p>
+</form>
